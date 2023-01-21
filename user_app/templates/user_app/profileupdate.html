@@ -1,0 +1,19 @@
+{% extends 'store_app/base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="col-11 col-md-6 mx-auto">
+        <div class="card shadow p-3 border-0 my-4">
+            <h4>User Registration Form</h4>
+            <form action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ u_form.as_p }}
+                {{ p_form.as_p }}
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+    <p>footer</p>
+</div>
+{% endblock content %}

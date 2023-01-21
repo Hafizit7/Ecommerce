@@ -1,0 +1,115 @@
+{% extends 'store_app/base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<div class="container">
+    <div class="heading heading-flex heading-border mb-3">
+        <div class="heading-left">
+            <h2 class="title">Category Products</h2><!-- End .title -->
+        </div><!-- End .heading-left -->
+
+    </div><!-- End .heading -->
+    <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl" 
+    data-owl-options='{
+        "nav": false, 
+        "dots": true,
+        "margin": 20,
+        "loop": false,
+        "responsive": {
+            "0": {
+                "items":2
+            },
+            "480": {
+                "items":2
+            },
+            "768": {
+                "items":3
+            },
+            "992": {
+                "items":4
+            },
+            "1280": {
+                "items":5,
+                "nav": true
+            }
+        }
+    }'>
+    
+    {% for c in page_obj %}
+    <div class="product">
+        <figure class="product-media">
+            <span class="product-label label-sale">Sale</span>
+            <a href="{% url 'product-detail' c.pk %}">
+                <img src="{{ c.image.url }}" alt="Product image" class="product-image">
+            </a>
+
+            <div class="product-action-vertical">
+                <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
+                <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
+            </div><!-- End .product-action-vertical -->
+
+            <div class="product-action">
+                <a href="#" class="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
+            </div><!-- End .product-action -->
+        </figure><!-- End .product-media -->
+
+        <div class="product-body">
+            <div class="product-cat">
+                <a href="#">{{ c.category.name }}</a>
+            </div><!-- End .product-cat -->
+            <h3 class="product-title"><a href="{% url 'product-detail' c.pk %}">{{ c.name }}</a></h3><!-- End .product-title -->
+            <div class="product-price">
+                
+                {% if c.discount_price %}
+                <span class="new-price">${{c.discount_price}}</span>
+                <span class="old-price">Was ${{c.price}}</span>
+                {% else %}
+                <span class="new-price">${{c.price}}</span>                              
+                {% endif %}
+                    
+
+            </div><!-- End .product-price -->
+            <div class="ratings-container">
+                <div class="ratings">
+                    <div class="ratings-val" style="width: 100%;"></div><!-- End .ratings-val -->
+                </div><!-- End .ratings -->
+                <span class="ratings-text">( 2 Reviews )</span>
+            </div><!-- End .rating-container -->
+        </div><!-- End .product-body -->
+    </div><!-- End .product -->
+    {% endfor %}
+    
+    </div><!-- End .owl-carousel -->
+
+    <nav aria-label="...">
+        <ul class="pagination">
+        {% if page_obj.has_previous %}
+          <li class="page-item">
+            <a class=" btn-sm btn btn-info mr-1" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">Previous</a>
+          </li>
+          {% endif %}
+          <a class="btn btn-sm btn-info mr-1" href="?page=1"> first</a>
+           {% for num in page_obj.paginator.page_range %}
+           
+           {% if page_obj.number == num %}
+            <li class="page-item" style="background-color:red ;" ><a class="page-link text-white" href="?page={{num}}">{{ num }}</a></li>
+           {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'4' %}
+           <li class="page-item" ><a class="page-link" href="?page={{num}}">{{ num }}</a></li>
+           {% endif %}
+            
+           {% endfor %}
+            
+          {% if page_obj.has_next %}
+          <li class="page-item">
+            <a class="btn-sm btn btn-info mr-1"  href="?page={{ page_obj.next_page_number }}">Next</a>
+          </li>
+          {% endif %}
+
+        </ul>
+      </nav>
+
+</div><!-- End .container -->
+{% endblock content %}
